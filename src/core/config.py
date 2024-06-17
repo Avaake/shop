@@ -7,7 +7,8 @@ class RunConfig(BaseModel):
     port: int = 7000
 
 
-class DBSettings(BaseModel):
+class DatabaseConfig(BaseModel):
+    # "mysql+aiomysql://admin:22lolka8833@localhost:3306/test3"
     url: MySQLDsn
     echo: bool = False
     echo_pool: bool = False
@@ -30,8 +31,8 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
     )
-    run_config: RunConfig = RunConfig()
-    db: DBSettings
+    run: RunConfig = RunConfig()
+    db: DatabaseConfig
 
 
 settings = Settings()

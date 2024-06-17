@@ -1,5 +1,5 @@
 from .base import Base
-from mixins import IntIdPkMixins
+from .mixins import IntIdPkMixins
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import VARCHAR
 
