@@ -19,3 +19,12 @@ class User(Base, IntIdPkMixins):
         default="user",
         server_default="user",
     )
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}(id={self.id}, username={self.username!r}, pw={self.password!r}, "
+            f"email={self.email!r}, reg_time={self.reg_time!r}, role={self.role!r},)"
+        )
+
+    def __repr__(self):
+        return str(self)
