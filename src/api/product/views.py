@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends
 from . import crud as product_crud
-from api.product.schemas import ProductRead, ProductCreate
+from api.product.schemas import ProductRead, ProductCreate, ProductCategoryRead
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper
