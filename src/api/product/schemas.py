@@ -8,7 +8,7 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    pass
+    category: str
 
 
 class ProductUpdate(ProductCreate):
@@ -24,3 +24,8 @@ class ProductUpdatePartial(ProductCreate):
 class ProductRead(ProductBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
+
+
+class CategoryRead(BaseModel):
+    id: int
+    name: str
