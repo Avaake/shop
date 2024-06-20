@@ -24,7 +24,7 @@ async def create_product(
     return product
 
 
-@router.get("", response_model=list[ProductRead])
+@router.get("/all", response_model=list[ProductRead])
 async def get_products(
     session: Annotated[
         AsyncSession,
@@ -32,4 +32,15 @@ async def get_products(
     ],
 ):
     product = await product_crud.get_all_products(session=session)
+    return product
+
+
+@router.get("/all-with-category", response_model=list[ProductCategoryRead])
+async def get_products_with_categories(
+    session: Annotated[
+        AsyncSession,
+        Depends(db_helper.session_getter),
+    ],
+):
+    product = await product_crud.get_all_products_with_categories(session=session)
     return product
