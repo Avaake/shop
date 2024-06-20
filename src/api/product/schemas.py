@@ -24,6 +24,13 @@ class ProductUpdatePartial(ProductCreate):
 class ProductRead(ProductBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    category_id: int
+
+
+class ProductCategoryRead(ProductBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    category_name: str
 
 
 class CategoryRead(BaseModel):
