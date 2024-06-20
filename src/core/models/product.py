@@ -8,7 +8,7 @@ class Product(Base, IntIdPkMixins):
     name: Mapped[str] = mapped_column(VARCHAR(100))
     descriptions: Mapped[str] = mapped_column(VARCHAR(500))
     price: Mapped[int]
-    category_id: Mapped[str] = mapped_column(ForeignKey("categories.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
     def __str__(self):
         return (
