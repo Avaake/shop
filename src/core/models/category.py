@@ -6,4 +6,4 @@ from sqlalchemy import VARCHAR
 
 class Category(Base, IntIdPkMixins):
     __tablename__ = "categories"
-    category: Mapped[str] = mapped_column(VARCHAR(100))
+    category_name: Mapped[str] = mapped_column(VARCHAR(100))
