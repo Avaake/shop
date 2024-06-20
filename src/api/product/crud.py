@@ -1,9 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import ProductCreate
+from .schemas import ProductCreate, ProductCategoryRead
 from core.models import Product, Category
 from sqlalchemy import select
-from typing import Sequence
+from typing import Sequence, NamedTuple
 from fastapi import HTTPException, status
+from sqlalchemy.orm import joinedload, selectinload
+from pydantic import BaseModel
 
 
 async def get_category_by_name(
@@ -45,3 +47,30 @@ async def get_all_products(
     stmt = select(Product).order_by(Product.id)
     result = await session.scalars(stmt)
     return result.all()
+
+
+async def get_all_products_and_categories(
+    session: AsyncSession,
+) -> list[ProductCategoryRead]:
+    stmt = (
+        select(
+            Product.name,
+            Product.descriptions,
+            Product.price,
+            Product.id,
+            Category.category_name,
+        )
+        .join(Category, Product.category_id == Category.id)
+        .order_by(Product.id)
+    )
+    result = await session.execute(stmt)
+    return [
+        ProductCategoryRead(
+            name=row[0],
+            descriptions=row[1],
+            price=row[2],
+            id=row[3],
+            category_name=row[4],
+        )
+        for row in result
+    ]
