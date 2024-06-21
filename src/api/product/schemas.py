@@ -11,14 +11,15 @@ class ProductCreate(ProductBase):
     category: str
 
 
-class ProductUpdate(ProductCreate):
-    pass
+# class ProductUpdate(BaseModel):
+#     category_id: int | None = None
 
 
-class ProductUpdatePartial(ProductCreate):
+class ProductUpdate(BaseModel):
     name: str | None = None
-    description: str | None = None
+    descriptions: str | None = None
     price: int | None = None
+    category_id: int | None = None
 
 
 class ProductRead(ProductBase):

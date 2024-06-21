@@ -1,9 +1,15 @@
 from fastapi import APIRouter, status, Depends
 from . import crud as product_crud
-from api.product.schemas import ProductRead, ProductCreate, ProductCategoryRead
+from api.product.schemas import (
+    ProductRead,
+    ProductCreate,
+    ProductCategoryRead,
+    ProductUpdate,
+)
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.models import db_helper
+from core.models import db_helper, Product
+from .dependencies import product_by_id
 
 router = APIRouter(
     tags=["Products"],
@@ -44,3 +50,14 @@ async def get_products_with_categories(
 ):
     product = await product_crud.get_all_products_with_categories(session=session)
     return product
+
+
+@router.patch("/{product_id}/")
+async def update_product(
+    product_update: ProductUpdate,
+    product: Product = Depends(product_by_id),
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await product_crud.update_product(
+        session=session, product=product, product_update=product_update, partial=True
+    )
