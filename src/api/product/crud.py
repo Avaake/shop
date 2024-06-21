@@ -104,3 +104,8 @@ async def update_product(
         setattr(product, name, value)
     await session.commit()
     return product
+
+
+async def delete_product(session: AsyncSession, product: Product):
+    await session.delete(product)
+    await session.commit()
