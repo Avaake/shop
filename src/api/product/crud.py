@@ -1,11 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import ProductCreate, ProductCategoryRead
+from .schemas import (
+    ProductCreate,
+    ProductCategoryRead,
+    ProductUpdate,
+)
 from core.models import Product, Category
 from sqlalchemy import select
-from typing import Sequence, NamedTuple
+from typing import Sequence
 from fastapi import HTTPException, status
 from sqlalchemy.orm import joinedload, selectinload
-from pydantic import BaseModel
 
 
 async def get_category_by_name(
@@ -49,7 +52,7 @@ async def get_all_products(
     return result.all()
 
 
-async def get_all_products_and_categories(
+async def get_all_products_with_categories(
     session: AsyncSession,
 ) -> list[ProductCategoryRead]:
     stmt = (
@@ -74,3 +77,19 @@ async def get_all_products_and_categories(
         )
         for row in result
     ]
+
+
+async def get_product(session: AsyncSession, product_id: int) -> Product | None:
+    return await session.get(Product, product_id)
+
+
+async def update_product(
+    session: AsyncSession,
+    product: Product,
+    product_update: ProductUpdate,
+    partial: bool = False,
+) -> Product:
+    for name, value in product_update.model_dump(exclude_unset=partial).items():
+        setattr(product, name, value)
+    await session.commit()
+    return product
