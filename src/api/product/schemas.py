@@ -34,6 +34,10 @@ class ProductCategoryRead(ProductBase):
     category_name: str
 
 
+class CategoryCrate(BaseModel):
+    category_name: str
+
+
 class CategoryRead(BaseModel):
     id: int
     name: str
