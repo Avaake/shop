@@ -3,12 +3,23 @@ from .schemas import (
     ProductCreate,
     ProductCategoryRead,
     ProductUpdate,
+    CategoryCrate,
 )
 from core.models import Product, Category
 from sqlalchemy import select
 from typing import Sequence
 from fastapi import HTTPException, status
 from sqlalchemy.orm import joinedload, selectinload
+
+
+async def create_category(
+    session: AsyncSession,
+    category: CategoryCrate,
+) -> Category:
+    category = Category(**category.model_dump())
+    session.add(category)
+    await session.commit()
+    return category
 
 
 async def get_category_by_name(
