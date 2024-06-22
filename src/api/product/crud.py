@@ -12,6 +12,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import joinedload, selectinload
 
 
+# CATEGORY
 async def create_category(
     session: AsyncSession,
     category: CategoryCrate,
@@ -36,6 +37,13 @@ async def get_category_by_name(
     return result
 
 
+async def get_categories(session: AsyncSession) -> Sequence[Category]:
+    stmt = select(Category).order_by(Category.id)
+    result = await session.scalars(stmt)
+    return result.all()
+
+
+# PRODUCT
 async def create_products(
     session: AsyncSession,
     product_create: ProductCreate,
