@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from .schemas import CreateUser
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -31,5 +31,9 @@ async def get_user_by_email(
     ],
     email: EmailStr,
 ):
-    user = await user_crud.get_user_by_email(session=session, email=email)
-    return user
+    if user := await user_crud.get_user_by_email(session=session, email=email):
+        return user
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"User with {email} not found",
+    )
