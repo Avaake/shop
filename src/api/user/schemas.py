@@ -7,3 +7,9 @@ class CreateUser(BaseModel):
     username: Annotated[str, MinLen(3), MaxLen(30)]
     email: EmailStr
     password: str
+
+
+class UserRead(BaseModel):
+    username: str
+    email: EmailStr
+    role: str
