@@ -13,24 +13,8 @@ from core.models import db_helper, Product
 from .dependencies import product_by_id
 
 router = APIRouter(
-    tags=["Products, Category"],
+    tags=["Products"],
 )
-
-
-@router.post(
-    "/category", response_model=CategoryCrate, status_code=status.HTTP_201_CREATED
-)
-async def create_category(
-    session: Annotated[
-        AsyncSession,
-        Depends(
-            db_helper.session_getter,
-        ),
-    ],
-    category_create: CategoryCrate,
-):
-    category = await product_crud.create_category(session, category_create)
-    return category
 
 
 @router.post("/", response_model=ProductRead, status_code=status.HTTP_201_CREATED)
