@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status, Depends
-from . import crud as product_crud
+from . import crud as product_category_crud
 from api.product.schemas import (
     CategoryCrate,
 )
@@ -22,5 +22,18 @@ async def create_category(
     ],
     category_create: CategoryCrate,
 ):
-    category = await product_crud.create_category(session, category_create)
+    category = await product_category_crud.create_category(session, category_create)
     return category
+
+
+@router.get("/", status_code=status.HTTP_200_OK)
+async def get_categories(
+    session: Annotated[
+        AsyncSession,
+        Depends(
+            db_helper.session_getter,
+        ),
+    ]
+):
+    categories = await product_category_crud.get_categories(session)
+    return categories
