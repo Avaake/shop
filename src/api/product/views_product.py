@@ -53,7 +53,7 @@ async def get_products_with_categories(
     return product
 
 
-@router.patch("/{product_id}/")
+@router.patch("/{product_id}//update")
 async def update_product(
     product_update: ProductUpdate,
     product: Product = Depends(product_by_id),
@@ -64,7 +64,7 @@ async def update_product(
     )
 
 
-@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{product_id}/delete", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product(
     product: Product = Depends(product_by_id),
     session: AsyncSession = Depends(db_helper.session_getter),

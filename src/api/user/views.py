@@ -2,16 +2,17 @@ from fastapi import APIRouter, status, Depends, HTTPException
 from .schemas import CreateUser
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.models import db_helper
+from core.models import db_helper, User
 from . import crud as user_crud
 from pydantic import EmailStr
+from .dependencies import get_user_by_id
 
 router = APIRouter(
     tags=["Users"],
 )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 async def register_user(
     session: Annotated[
         AsyncSession,
@@ -37,3 +38,14 @@ async def get_user_by_email(
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"User with {email} not found",
     )
+
+
+@router.delete("/{user_id}/delete")
+async def delete_user_by_id(
+    session: Annotated[
+        AsyncSession,
+        Depends(db_helper.session_getter),
+    ],
+    user: User = Depends(get_user_by_id),
+):
+    return await user_crud.delete_user(session=session, user=user)
