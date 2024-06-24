@@ -42,3 +42,15 @@ async def create_user(
     await session.commit()
     await session.refresh(user)
     return user
+
+
+async def get_user(session: AsyncSession, user_id: int):
+    return await session.get(User, user_id)
+
+
+async def delete_user(
+    session: AsyncSession,
+    user: User,
+):
+    await session.delete(user)
+    await session.commit()
