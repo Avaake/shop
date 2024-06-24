@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import CreateUser, UserRead
+from .schemas import CreateUser, UserRead, UserUpdate
 from sqlalchemy import select
 from core.models import User
 from fastapi import status, HTTPException
@@ -54,3 +54,17 @@ async def delete_user(
 ):
     await session.delete(user)
     await session.commit()
+
+
+async def user_update(
+    session: AsyncSession,
+    user: User,
+    update_user: UserUpdate,
+) -> User:
+    for name, value in update_user.model_dump(exclude_unset=True).items():
+        if name == "password":
+            value = hash_password(value)
+        setattr(user, name, value)
+    await session.commit()
+    await session.refresh(user)
+    return user

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status, Depends, HTTPException
-from .schemas import CreateUser
+from .schemas import CreateUser, UserUpdate
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper, User
@@ -49,3 +49,17 @@ async def delete_user_by_id(
     user: User = Depends(get_user_by_id),
 ):
     return await user_crud.delete_user(session=session, user=user)
+
+
+@router.patch("/{user_id}/update")
+async def update_user_by_id(
+    update_user: UserUpdate,
+    session: Annotated[
+        AsyncSession,
+        Depends(db_helper.session_getter),
+    ],
+    user: User = Depends(get_user_by_id),
+):
+    return await user_crud.user_update(
+        session=session, user=user, update_user=update_user
+    )
