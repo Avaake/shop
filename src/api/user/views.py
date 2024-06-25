@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status, Depends, HTTPException
-from .schemas import CreateUser, UserUpdate
+from .schemas import CreateUser, UserUpdate, UserRead
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper, User
@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.post("/create", status_code=status.HTTP_201_CREATED)
+@router.post("/create/", status_code=status.HTTP_201_CREATED)
 async def register_user(
     session: Annotated[
         AsyncSession,
@@ -24,7 +24,7 @@ async def register_user(
     return {"user": f"{user.username, user.email} register"}
 
 
-@router.get("/{email}")
+@router.get("/{email}/")
 async def get_user_by_email(
     session: Annotated[
         AsyncSession,
@@ -40,7 +40,7 @@ async def get_user_by_email(
     )
 
 
-@router.delete("/{user_id}/delete")
+@router.delete("/{user_id}/delete/")
 async def delete_user_by_id(
     session: Annotated[
         AsyncSession,
@@ -51,7 +51,7 @@ async def delete_user_by_id(
     return await user_crud.delete_user(session=session, user=user)
 
 
-@router.patch("/{user_id}/update")
+@router.patch("/{user_id}/update/")
 async def update_user_by_id(
     update_user: UserUpdate,
     session: Annotated[
@@ -63,3 +63,10 @@ async def update_user_by_id(
     return await user_crud.user_update(
         session=session, user=user, update_user=update_user
     )
+
+
+@router.post("/{user_id}/")
+async def get_user_by_id(
+    user: User = Depends(get_user_by_id),
+):
+    return user
