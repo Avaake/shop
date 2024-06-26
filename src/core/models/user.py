@@ -19,6 +19,7 @@ class User(Base, IntIdPkMixins):
         default="user",
         server_default="user",
     )
+    active: Mapped[bool] = mapped_column(default=True, server_default="1")
 
     def __str__(self):
         return (
